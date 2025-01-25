@@ -12,7 +12,7 @@ export async function authMiddleware(req, _res, next) {
     if (!user || !user._id) {
       throw new Error("not found");
     }
-    req.userId=user._id
+    req.user = user;
     next();
   } catch (error) {
     next("token invalid", error.message);

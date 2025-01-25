@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
-import validator from 'validator'
+import validator from "validator";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const userSchema = new Schema(
   {
@@ -29,8 +31,8 @@ const userSchema = new Schema(
     },
     age: { type: Number },
     gender: {
-      type:String,
-          validate(value) {
+      type: String,
+      validate(value) {
         if (!["male", "female", "others"].includes(value)) {
           throw new Error("Gender data is not valid");
         }
@@ -56,6 +58,17 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+userSchema.methods.getJWT = async function () {
+  const token = await jwt.sign({ id: this._id }, process.env.JWT_TOKEN);
+  return token;
+};
+
+userSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password, 10);
+
+  next();
+});
 
 const userModel = mongoose.model("User", userSchema);
 
