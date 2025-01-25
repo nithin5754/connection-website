@@ -34,7 +34,41 @@ const validateEditProfileData = (req) => {
 };
 
 
+
+const validateLogin=(req)=>{
+
+  const {emailId}=req.body
+
+  if (!validator.isEmail(emailId)) {
+    throw new Error("Email is not valid!");
+  } 
+
+
+
+  const allowedFields = [
+  "password",
+    "emailId",
+ 
+  ];
+
+  const isAllowedFields=Object.keys(req.body).every((field)=>allowedFields.includes(field))
+
+
+  if (!isAllowedFields) {
+    throw new Error("only email adn password allowed");
+  } 
+
+  return isAllowedFields
+
+}
+
 export {
   validateEditProfileData,
+  validateLogin,
   validateSignUpData
 }
+
+
+
+
+

@@ -12,7 +12,7 @@ function getRandomAge(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-export function fakerProfiles() {
+export async function fakerProfiles() {
   const profiles = [];
 
   for (let i = 0; i < 100; i++) {
@@ -23,6 +23,8 @@ export function fakerProfiles() {
     const lastName = faker.person.lastName(sex);
     const emailId = faker.internet.email({ firstName, lastName });
     const password = faker.internet.password();
+    
+    const passwordHash = await bcrypt.hash(password, 10);
     const age = getRandomAge(20, 55);
     const gender = sex;
 
@@ -30,7 +32,7 @@ export function fakerProfiles() {
       firstName,
       lastName,
       emailId,
-      password,
+      password:passwordHash,
       age,
       gender,
     });
