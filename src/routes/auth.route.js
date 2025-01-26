@@ -1,27 +1,15 @@
+import express from "express";
+import { loginUser, seed, signUp } from "../controller/auth.controller.js";
 
-import express from 'express'
-import { getUser, loginUser, seed, sendConnections, signUp } from '../controller/auth.controller.js'
-import { authMiddleware } from '../middleware/authMiddleware.js'
-
-const router = express.Router()
-
-
-
+const router = express.Router();
 
 function authRoutes() {
+  router.post("/signup", signUp);
+  router.post("/login", loginUser);
 
-  router.post('/signup',signUp)
-  router.post('/login',loginUser)
-  router.get('/profile',authMiddleware,getUser)
+  router.get("/seed", seed);
 
-  router.get('/sendConnections',authMiddleware,sendConnections)
-
-
-
-  router.get('/seed',seed)
-
-  return router
+  return router;
 }
 
-
-export default authRoutes
+export default authRoutes;
