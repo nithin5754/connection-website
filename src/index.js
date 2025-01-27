@@ -7,6 +7,7 @@ import ErrorHandlingMiddleWare from "./middleware/error-handdling.js";
 import cookieParser from "cookie-parser";
 import profileRoutes from "./routes/profile.route.js";
 import userRoutes from "./routes/user.route.js";
+import requestRoutes from "./routes/request.user.js";
 
 const app = express();
 app.use(cookieParser());
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/", authRoutes());
 app.use("/", profileRoutes());
 app.use("/", userRoutes());
+app.use("/",requestRoutes())
 
 app.use(ErrorHandlingMiddleWare);
 

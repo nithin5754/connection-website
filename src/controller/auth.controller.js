@@ -73,20 +73,18 @@ const loginUser = async (req, res, next) => {
     if (!user) {
       throw new Error("Invalid credentials");
     }
-    const isPasswordValid = await user.verifyPass(password)
+    const isPasswordValid = await user.verifyPass(password);
 
     if (!isPasswordValid) {
       throw new Error("Invalid credentials");
     }
     const token = await user.getJWT();
 
-    res.cookie("jwt", token);
-    res.status(200).json({ message: "User login" });
+    res.cookie("jwt", token).status(200).json({ message: "User login" });
   } catch (error) {
     next(error);
   }
 };
-
 
 const seed = async (_req, res) => {
   let data = fakerProfiles();
@@ -98,4 +96,18 @@ const seed = async (_req, res) => {
   res.send("create seeds");
 };
 
-export { signUp, seed, loginUser };
+const logout = async (req, res, next) => {
+  try {
+    res
+      .cookie("jwt", null, {
+        expires: new Date(Date.now()),
+      })
+
+      .status(200)
+      .json("logout successfully ");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { signUp, seed, loginUser, logout };
