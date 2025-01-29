@@ -8,10 +8,18 @@ import cookieParser from "cookie-parser";
 import profileRoutes from "./routes/profile.route.js";
 import userRoutes from "./routes/user.route.js";
 import requestRoutes from "./routes/request.user.js";
+import cors from 'cors'
 
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use("/", authRoutes());
 app.use("/", profileRoutes());

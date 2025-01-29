@@ -26,6 +26,17 @@ const connectionRequestSchema = new mongoose.Schema(
 
 )
 
+connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 });
+
+
+connectionRequestSchema.pre('save',function (next) {
+  if(this.toUserId.toString()===this.fromUserId.toString()){
+    throw new Error("invalid cannot send same connection");
+    
+  }
+  next()
+})
+ 
 
 
 const ConnectionRequestModel = new mongoose.model(

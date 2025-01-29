@@ -10,6 +10,9 @@
  * @returns {void} - Sends a JSON response with user details or passes an error to the next middleware.
  */
 
+import userModel from "../models/user.model.js";
+import { validateEditProfileData } from "../utils/validation.js";
+
 const profileView = async (req, res, next) => {
   try {
     const user = req.user;
@@ -24,4 +27,30 @@ const profileView = async (req, res, next) => {
   }
 };
 
-export { profileView };
+
+const profileEdit=async(req,res,next)=>{
+
+  try {
+    if (!validateEditProfileData(req)) {
+      throw new Error("Invalid Edit Request");
+    }
+   
+
+   
+
+    // Object.keys(req.body).forEach((key)=>(loggedInUser[key]=req.body))
+
+    // await loggedInUser.save()
+
+    const isUpdate=await userModel.findOneAndUpdate({_id:req.user._id},{$set:req.body},{new: true})
+
+    res.json({
+      message: `${isUpdate.firstName}, your profile updated successfuly`,
+    data:isUpdate
+    });
+  } catch (error) {
+    next(error)
+  }
+}
+
+export { profileView ,profileEdit};

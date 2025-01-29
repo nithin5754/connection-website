@@ -39,6 +39,8 @@ const validateLogin=(req)=>{
 
   const {emailId}=req.body
 
+
+
   if (!validator.isEmail(emailId)) {
     throw new Error("Email is not valid!");
   } 
@@ -61,12 +63,36 @@ const validateLogin=(req)=>{
   return isAllowedFields
 
 }
+const connectionRequestValidation=(req)=>{
 
+  const allowedConnectionRequestStatus=["ignored", "interested"]
+
+  const {status,toUserId}=req.params
+
+  
+  if ( !toUserId || !status) {
+    throw new Error("credentials missing");
+  }
+
+  const isValidStatus=allowedConnectionRequestStatus.includes(status);
+
+  if(!isValidStatus){
+    throw new Error("invalid request");
+    
+  }
+
+  return true
+
+}
 export {
   validateEditProfileData,
   validateLogin,
-  validateSignUpData
+  validateSignUpData,
+  connectionRequestValidation
 }
+
+
+
 
 
 

@@ -1,6 +1,5 @@
 import userModel from "../models/user.model.js";
 import { fakerProfiles } from "../utils/faker.js";
-import bcrypt from "bcrypt";
 import { validateLogin, validateSignUpData } from "../utils/validation.js";
 import { userSanitize } from "../utils/sanitize.js";
 
@@ -39,10 +38,11 @@ const signUp = async (req, res, next) => {
       password,
     });
     await user.save();
+    const token = await user.getJWT();
 
-    res
-      .status(201)
-      .json({ message: "User Added successfully!", data: userSanitize(user) });
+    res.cookie("jwt", token).status(201).json({ message: "User Added successfully!", data:user });
+
+    
   } catch (error) {
     next(error);
   }
@@ -69,6 +69,8 @@ const loginUser = async (req, res, next) => {
 
     const { emailId, password } = req.body;
 
+
+
     const user = await userModel.findOne({ emailId: emailId });
     if (!user) {
       throw new Error("Invalid credentials");
@@ -80,20 +82,23 @@ const loginUser = async (req, res, next) => {
     }
     const token = await user.getJWT();
 
-    res.cookie("jwt", token).status(200).json({ message: "User login" });
+    res.cookie("jwt", token).status(200).json({ message: "User login", data:user });
   } catch (error) {
     next(error);
   }
 };
 
 const seed = async (_req, res) => {
-  let data = fakerProfiles();
+  let data =await fakerProfiles();
+
+
 
   for (let i = 0; i < data.length; i++) {
-    await userModel.create(data[i]);
+   const save= await userModel.create(data[i]);
+   
   }
-
-  res.send("create seeds");
+     const details=await userModel.find()
+  res.status(200).json({message:"details list",details})
 };
 
 const logout = async (req, res, next) => {
