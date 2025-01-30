@@ -115,4 +115,14 @@ const logout = async (req, res, next) => {
   }
 };
 
-export { signUp, seed, loginUser, logout };
+const testApi= async (req, res, next) => {
+  try {
+    res
+      .status(200)
+      .json("TEST SUCCESSFULLY  RUN!");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { signUp, seed, loginUser, logout,testApi };

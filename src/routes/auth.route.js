@@ -1,5 +1,5 @@
 import express from "express";
-import { loginUser, logout, seed, signUp } from "../controller/auth.controller.js";
+import { loginUser, logout, seed, signUp, testApi } from "../controller/auth.controller.js";
 
 const router = express.Router();
 
@@ -8,6 +8,7 @@ function authRoutes() {
   router.post("/login", loginUser);
   router.post('/logout',logout)
   router.get("/seed", seed);
+  router.get('/test',testApi)
 
   return router;
 }
