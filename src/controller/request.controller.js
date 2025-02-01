@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import ConnectionRequestModel from "../models/connectionRequest.model.js";
 import { connectionRequestValidation } from "../utils/validation.js";
+import { run } from "../utils/SendEmail.js";
+
 /**
  * send request and ignored to connection users from the authenticated user.
  * Assumes `req.user` contains the authenticated user data, typically set by an authentication middleware.
@@ -49,6 +51,12 @@ const sendRequest = async (req, res, next) => {
     if (isRequestExist && isRequestExist.length > 0) {
       throw new Error("found duplicate");
     }
+
+    const sendButton=await run()
+
+    console.log("email send",sendButton)
+
+     
 
     await ConnectionRequestModel.create({ fromUserId, toUserId, status });
 
